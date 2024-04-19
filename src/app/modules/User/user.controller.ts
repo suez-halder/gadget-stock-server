@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { UserServices } from './user.service'
 
 const registerUserIntoDB = async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ const registerUserIntoDB = async (req: Request, res: Response) => {
   }
 }
 
-const loginUser = async (req: Request, res: Response) => {
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await UserServices.loginUser(req.body)
     const { refreshToken } = result
@@ -36,12 +36,8 @@ const loginUser = async (req: Request, res: Response) => {
         accessToken: result.accessToken,
       },
     })
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong!',
-      data: err.message,
-    })
+  } catch (err) {
+    next(err)
   }
 }
 
