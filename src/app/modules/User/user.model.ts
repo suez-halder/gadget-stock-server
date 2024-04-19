@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose'
 import { Role, USER_ROLE } from './user.constant'
 import { TUser } from './user.interface'
 import bcrypt from 'bcrypt'
-import config from '../../../config'
+import config from '../../config'
 
 const userSchema = new Schema<TUser>({
   name: {
@@ -24,22 +24,21 @@ const userSchema = new Schema<TUser>({
     enum: Role,
     default: USER_ROLE.USER,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // password encryption
 userSchema.pre('save', async function (next) {
   const hashedPassword = await bcrypt.hash(
-    this.password as string,
+    this.password,
     Number(config.bcrypt_salt_rounds),
   )
 
   this.password = hashedPassword
   next()
-})
-
-// don't show password in response
-userSchema.post('save', function (doc, next) {
-  ;(doc.password = undefined), next()
 })
 
 export const User = model<TUser>('User', userSchema)
