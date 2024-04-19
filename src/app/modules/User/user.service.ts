@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 import jwt, { Secret } from 'jsonwebtoken'
 import { jwtHelpers } from '../../utils/jwtHelpers'
 import config from '../../config'
+import ApiError from '../../errors/ApiError'
+import httpStatus from 'http-status'
 
 // -----------------
 // ! Register User
@@ -26,7 +28,7 @@ const loginUser = async (payload: Pick<TUser, 'email' | 'password'>) => {
   }).select('+password')
 
   if (!userData) {
-    throw new Error('This user does not exists!')
+    throw new ApiError(httpStatus.BAD_REQUEST, 'This user does not exists!')
   }
 
   //check: password match
@@ -36,7 +38,7 @@ const loginUser = async (payload: Pick<TUser, 'email' | 'password'>) => {
   )
 
   if (!isPasswordMatched) {
-    throw new Error('Password do not match!')
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Password do not match!')
   }
 
   // generate accessToken
