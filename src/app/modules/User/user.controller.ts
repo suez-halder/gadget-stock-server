@@ -1,45 +1,38 @@
 import { NextFunction, Request, Response } from 'express'
+import httpStatus from 'http-status'
+import catchAsync from '../../utils/catchAsync'
+import sendResponse from '../../utils/sendResponse'
 import { UserServices } from './user.service'
 
-const registerUserIntoDB = async (req: Request, res: Response) => {
-  try {
-    const result = await UserServices.registerUserIntoDB(req.body)
+const registerUserIntoDB = catchAsync(async (req, res) => {
+  const result = await UserServices.registerUserIntoDB(req.body)
 
-    res.status(201).json({
-      success: true,
-      message: 'User registered successfully!',
-      data: result,
-    })
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Something went wrong!',
-      data: err.message,
-    })
-  }
-}
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'User registered successfully!',
+    data: result,
+  })
+})
 
-const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await UserServices.loginUser(req.body)
-    const { refreshToken } = result
+const loginUser = catchAsync(async (req, res) => {
+  const result = await UserServices.loginUser(req.body)
+  const { refreshToken } = result
 
-    res.cookie('refreshToken', refreshToken, {
-      secure: false,
-      httpOnly: true,
-    })
+  res.cookie('refreshToken', refreshToken, {
+    secure: false,
+    httpOnly: true,
+  })
 
-    res.status(201).json({
-      success: true,
-      message: 'User logged in successfully!',
-      data: {
-        accessToken: result.accessToken,
-      },
-    })
-  } catch (err) {
-    next(err)
-  }
-}
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'User logged in successfully!',
+    data: {
+      accessToken: result.accessToken,
+    },
+  })
+})
 
 export const UserControllers = {
   registerUserIntoDB,
