@@ -53,25 +53,25 @@ const updateGadgetIntoDB = catchAsync(async (req, res) => {
 const softDeleteGadgetFromDB = catchAsync(async (req, res) => {
   const { id } = req.params
   const user = req.user as TAuthUser
-  const result = await GadgetServices.softDeleteGadgetFromDB(id, req.body, user)
+  await GadgetServices.softDeleteGadgetFromDB(id, req.body, user)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: `Gadget soft deleted successfully!`,
-    data: result,
+    data: null,
   })
 })
 const deleteGadgetFromDB = catchAsync(async (req, res) => {
   const { id } = req.params
   const user = req.user as TAuthUser
-  const result = await GadgetServices.deleteGadgetFromDB(id, user)
+  await GadgetServices.deleteGadgetFromDB(id, user)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: `Gadget deleted from DB!`,
-    data: result,
+    data: null,
   })
 })
 

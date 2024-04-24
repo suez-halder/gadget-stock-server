@@ -41,6 +41,8 @@ const getAllGadgetsFromDB = async (user: TAuthUser) => {
   }
   let result
 
+  //TODO: filtering
+
   if (userData.role === USER_ROLE.USER) {
     result = await Gadget.find({
       user: {
@@ -59,7 +61,41 @@ const getAllGadgetsFromDB = async (user: TAuthUser) => {
 // -------------------
 
 const getSingleGadgetFromDB = async (id: string, user: TAuthUser) => {
-  const result = await Gadget.findById(id)
+  // check if gadget exists
+  const isGadgetExists = await Gadget.findById(id)
+  if (!isGadgetExists) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Please enter a valid Gadget Id!',
+    )
+  }
+
+  const userData = await User.findOne({
+    email: user.email,
+  })
+
+  if (!userData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
+  }
+  let result
+
+  if (userData.role === USER_ROLE.USER) {
+    result = await Gadget.findOne({
+      user: {
+        _id: userData.id,
+      },
+      _id: id,
+    })
+    if (!result) {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to view this gadget',
+      )
+    }
+  } else {
+    result = await Gadget.findById(id)
+  }
+
   return result
 }
 
@@ -72,7 +108,47 @@ const updateGadgetIntoDB = async (
   payload: Partial<TGadget>,
   user: TAuthUser,
 ) => {
-  const result = await Gadget.findByIdAndUpdate(id, payload)
+  // check if gadget exists
+  const isGadgetExists = await Gadget.findById(id)
+  if (!isGadgetExists) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Please enter a valid Gadget Id!',
+    )
+  }
+
+  const userData = await User.findOne({
+    email: user.email,
+  })
+
+  if (!userData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
+  }
+
+  let result
+
+  //TODO: update for objects
+
+  if (userData.role === USER_ROLE.USER) {
+    result = await Gadget.findOneAndUpdate(
+      {
+        user: {
+          _id: userData.id,
+        },
+        _id: id,
+      },
+      payload,
+    )
+    if (!result) {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to update this gadget',
+      )
+    }
+  } else {
+    result = await Gadget.findByIdAndUpdate(id, payload)
+  }
+
   return result
 }
 
@@ -85,9 +161,49 @@ const softDeleteGadgetFromDB = async (
   payload: { isDeleted: boolean },
   user: TAuthUser,
 ) => {
-  const result = await Gadget.findByIdAndUpdate(id, {
-    isDeleted: payload.isDeleted,
+  // check if gadget exists
+  const isGadgetExists = await Gadget.findById(id)
+  if (!isGadgetExists) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Please enter a valid Gadget Id!',
+    )
+  }
+
+  const userData = await User.findOne({
+    email: user.email,
   })
+
+  if (!userData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
+  }
+
+  let result
+
+  if (userData.role === USER_ROLE.USER) {
+    result = await Gadget.findOneAndUpdate(
+      {
+        user: {
+          _id: userData.id,
+        },
+        _id: id,
+      },
+      {
+        isDeleted: payload.isDeleted,
+      },
+    )
+    if (!result) {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to delete this gadget',
+      )
+    }
+  } else {
+    result = await Gadget.findByIdAndUpdate(id, {
+      isDeleted: payload.isDeleted,
+    })
+  }
+
   return result
 }
 
@@ -96,7 +212,43 @@ const softDeleteGadgetFromDB = async (
 // -------------------
 
 const deleteGadgetFromDB = async (id: string, user: TAuthUser) => {
-  const result = await Gadget.findByIdAndDelete(id)
+  // check if gadget exists
+  const isGadgetExists = await Gadget.findById(id)
+  if (!isGadgetExists) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Please enter a valid Gadget Id!',
+    )
+  }
+
+  //check if user exists
+  const userData = await User.findOne({
+    email: user.email,
+  })
+
+  if (!userData) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
+  }
+
+  let result
+
+  if (userData.role === USER_ROLE.USER) {
+    result = await Gadget.findOneAndDelete({
+      user: {
+        _id: userData.id,
+      },
+      _id: id,
+    })
+    if (!result) {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        'You are not authorized to delete this gadget from DB',
+      )
+    }
+  } else {
+    result = await Gadget.findByIdAndDelete(id)
+  }
+
   return result
 }
 
