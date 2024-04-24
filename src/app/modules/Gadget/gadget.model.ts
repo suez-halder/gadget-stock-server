@@ -78,6 +78,10 @@ const sizeSchema = new Schema<TSize>(
 
 const gadgetSchema = new Schema<TGadget>(
   {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     modelNumber: {
       type: String,
       unique: true,

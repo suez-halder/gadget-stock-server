@@ -18,7 +18,7 @@ const auth = (...roles: TUserRole[]) => {
 
     const decoded = jwtHelpers.verifyToken(
       token,
-      config.jwt_secret.jwt_access_token_secret,
+      config.jwt_secret.jwt_access_token_secret as string,
     ) as JwtPayload
 
     const { email, role } = decoded
@@ -37,7 +37,7 @@ const auth = (...roles: TUserRole[]) => {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized')
     }
 
-    req.user = decoded
+    req.user = decoded as JwtPayload
 
     next()
   })

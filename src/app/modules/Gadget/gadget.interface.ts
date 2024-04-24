@@ -1,3 +1,5 @@
+import { Types } from 'mongoose'
+
 export type TCategory =
   | 'Smartphone'
   | 'Laptop'
@@ -55,6 +57,7 @@ export type TSize = {
 }
 
 export type TGadget = {
+  user: Types.ObjectId
   modelNumber: string
   price: string
   releaseDate: string

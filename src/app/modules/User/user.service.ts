@@ -51,8 +51,6 @@ const loginUser = async (payload: Pick<TUser, 'email' | 'password'>) => {
     config.jwt_secret.jwt_access_token_expires_in as string,
   )
 
-  console.log(accessToken)
-
   // generate refreshToken and set it to cookies
   const refreshToken = jwtHelpers.generateToken(
     {
