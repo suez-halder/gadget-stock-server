@@ -6,7 +6,7 @@ export type TCategory =
   | 'Speaker'
   | 'Camera'
 
-export type TOperatingSystem = 'iOS' | 'Android' | 'Windows'
+export type TOperatingSystem = 'iOS' | 'Android' | 'macOS' | 'Windows'
 export type TConnectivity = 'Bluetooth' | 'Wi-Fi' | ' USB-C'
 export type TPowerSource = 'battery-powered' | 'plug-in'
 
@@ -55,6 +55,7 @@ export type TSize = {
 }
 
 export type TGadget = {
+  modelNumber: string
   price: string
   releaseDate: string
   brand: string

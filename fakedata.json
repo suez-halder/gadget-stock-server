@@ -57,6 +57,7 @@
 ]
 
 /** Smartphone Category:**/
+
 [
     {
       "category": "Smartphone",
@@ -115,7 +116,7 @@
       "connectivity": " USB-C",
       "powerSource": "battery-powered"
     }
-  ]
+  ],
 
   /** Smartwatch Category:**/
   [
@@ -280,7 +281,7 @@
       "connectivity": " USB-C",
       "powerSource": "plug-in"
     }
-  ]
+  ],
 
     /** Camera Category:**/
     [
@@ -297,7 +298,7 @@
           "price": "1200",
           "releaseDate": "2024-04-15",
           "brand": "Canon",
-          "connectivity": " Wi-Fi",
+          "connectivity": "Wi-Fi",
           "powerSource": "battery-powered"
         },
         {
@@ -313,7 +314,7 @@
           "price": "1000",
           "releaseDate": "2024-03-20",
           "brand": "Sony",
-          "connectivity": " USB-C",
+          "connectivity": "USB-C",
           "powerSource": "battery-powered"
         },
         {

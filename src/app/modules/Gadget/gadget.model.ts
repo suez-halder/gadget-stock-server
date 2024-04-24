@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose'
 import {
   BatteryLife,
   CameraResolution,
-  CameraTyppe,
+  CameraType,
   Category,
   Connectivity,
   DisplayResolution,
@@ -35,7 +35,7 @@ const featuresSchema = new Schema<TFeatures>({
   },
   cameraType: {
     type: String,
-    enum: CameraTyppe,
+    enum: CameraType,
   },
   headphoneType: {
     type: String,
@@ -66,50 +66,59 @@ const sizeSchema = new Schema<TSize>({
   },
 })
 
-const gadgetSchema = new Schema<TGadget>({
-  price: {
-    type: String,
-    required: true,
+const gadgetSchema = new Schema<TGadget>(
+  {
+    modelNumber: {
+      type: String,
+      unique: true,
+    },
+    price: {
+      type: String,
+      required: true,
+    },
+    releaseDate: {
+      type: String,
+      required: true,
+    },
+    brand: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      enum: Category,
+      required: true,
+    },
+    operatingSystem: {
+      type: String,
+      enum: OperatingSystem,
+    },
+    connectivity: {
+      type: String,
+      enum: Connectivity,
+      required: true,
+    },
+    powerSource: {
+      type: String,
+      enum: PowerSource,
+      required: true,
+    },
+    features: {
+      type: featuresSchema,
+      required: true,
+    },
+    size: {
+      type: sizeSchema,
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  releaseDate: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-  brand: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    enum: Category,
-    required: true,
-  },
-  operatingSystem: {
-    type: String,
-    enum: OperatingSystem,
-  },
-  connectivity: {
-    type: String,
-    enum: Connectivity,
-    required: true,
-  },
-  powerSource: {
-    type: String,
-    enum: PowerSource,
-    required: true,
-  },
-  features: {
-    type: featuresSchema,
-    required: true,
-  },
-  size: {
-    type: sizeSchema,
-    required: true,
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
-})
+)
 
 export const Gadget = model<TGadget>('Gadget', gadgetSchema)

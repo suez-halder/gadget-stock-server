@@ -24,7 +24,12 @@ export const Category: TCategory[] = [
   'Camera',
 ]
 
-export const OperatingSystem: TOperatingSystem[] = ['iOS', 'Android', 'Windows']
+export const OperatingSystem: TOperatingSystem[] = [
+  'iOS',
+  'Android',
+  'macOS',
+  'Windows',
+]
 export const Connectivity: TConnectivity[] = ['Bluetooth', 'Wi-Fi', ' USB-C']
 export const PowerSource: TPowerSource[] = ['battery-powered', 'plug-in']
 
@@ -58,7 +63,7 @@ export const DisplayResolution: TDisplayResolution[] = [
   '4k',
 ]
 
-export const CameraTyppe: TCameraType[] = [
+export const CameraType: TCameraType[] = [
   'DSLR',
   'Mirrorless',
   'Compact',
