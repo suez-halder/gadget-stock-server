@@ -1,0 +1,335 @@
+/** Laptop Category:**/
+[
+  {
+    "category": "Laptop",
+    "features": {
+      "storageCapacity": "1tb",
+      "displaySize": "13inches",
+      "displayResolution": "4k"
+    },
+    "size": {
+      "weight": "1.4 kg",
+      "dimensions": "304 x 212 x 15 mm"
+    },
+    "price": "1200",
+    "releaseDate": "2024-03-15",
+    "brand": "Apple",
+    "operatingSystem": "macOS",
+    "connectivity": "Wi-Fi",
+    "powerSource": "battery-powered"
+  },
+  {
+    "category": "Laptop",
+    "features": {
+      "storageCapacity": "512gb",
+      "displaySize": "14inches",
+      "displayResolution": "1080p"
+    },
+    "size": {
+      "weight": "1.6 kg",
+      "dimensions": "323 x 227 x 18 mm"
+    },
+    "price": "850",
+    "releaseDate": "2024-01-20",
+    "brand": "Dell",
+    "operatingSystem": "Windows",
+    "connectivity": "Bluetooth",
+    "powerSource": "battery-powered"
+  },
+  {
+    "category": "Laptop",
+    "features": {
+      "storageCapacity": "2tb",
+      "displaySize": "16inches",
+      "displayResolution": "2k"
+    },
+    "size": {
+      "weight": "2.0 kg",
+      "dimensions": "356 x 234 x 19 mm"
+    },
+    "price": "1800",
+    "releaseDate": "2024-05-10",
+    "brand": "HP",
+    "operatingSystem": "Windows",
+    "connectivity": " USB-C",
+    "powerSource": "battery-powered"
+  }
+]
+
+/** Smartphone Category:**/
+[
+    {
+      "category": "Smartphone",
+      "features": {
+        "cameraResolution": "108mp",
+        "storageCapacity": "1tb",
+        "displaySize": "6.7inches",
+        "displayResolution": "4k"
+      },
+      "size": {
+        "weight": "208 grams",
+        "dimensions": "158 x 77.8 x 8.1 mm"
+      },
+      "price": "1100",
+      "releaseDate": "2024-02-10",
+      "brand": "Samsung",
+      "operatingSystem": "Android",
+      "connectivity": "Wi-Fi",
+      "powerSource": "battery-powered"
+    },
+    {
+      "category": "Smartphone",
+      "features": {
+        "cameraResolution": "48mp",
+        "storageCapacity": "512gb",
+        "displaySize": "6inches",
+        "displayResolution": "1080p"
+      },
+      "size": {
+        "weight": "174 grams",
+        "dimensions": "147 x 71 x 7.4 mm"
+      },
+      "price": "750",
+      "releaseDate": "2023-11-25",
+      "brand": "Google",
+      "operatingSystem": "Android",
+      "connectivity": "Bluetooth",
+      "powerSource": "battery-powered"
+    },
+    {
+      "category": "Smartphone",
+      "features": {
+        "cameraResolution": "16mp",
+        "storageCapacity": "256gb",
+        "displaySize": "6inches",
+        "displayResolution": "720p"
+      },
+      "size": {
+        "weight": "165 grams",
+        "dimensions": "143 x 68 x 8.5 mm"
+      },
+      "price": "500",
+      "releaseDate": "2024-04-15",
+      "brand": "Xiaomi",
+      "operatingSystem": "Android",
+      "connectivity": " USB-C",
+      "powerSource": "battery-powered"
+    }
+  ]
+
+  /** Smartwatch Category:**/
+  [
+    {
+      "category": "Smartwatch",
+      "features": {
+        "storageCapacity": "128gb",
+        "displaySize": "4.2inches",
+        "displayResolution": "720p",
+        "healthMonitoring": "Heart Rate",
+        "batteryLife": "48 hours"
+      },
+      "size": {
+        "weight": "50 grams",
+        "dimensions": "44 x 38 x 10.7 mm"
+      },
+      "price": "300",
+      "releaseDate": "2024-03-25",
+      "brand": "Apple",
+      "operatingSystem": "iOS",
+      "connectivity": "Bluetooth",
+      "powerSource": "battery-powered"
+    },
+    {
+      "category": "Smartwatch",
+      "features": {
+        "storageCapacity": "128gb",
+        "displaySize": "3.5inches",
+        "displayResolution": "1080p",
+        "healthMonitoring": "Blood Oxygen",
+        "batteryLife": "72 hours"
+      },
+      "size": {
+        "weight": "55 grams",
+        "dimensions": "46 x 42 x 12 mm"
+      },
+      "price": "450",
+      "releaseDate": "2024-01-20",
+      "brand": "Samsung",
+      "operatingSystem": "Android",
+      "connectivity": "Wi-Fi",
+      "powerSource": "battery-powered"
+    },
+    {
+      "category": "Smartwatch",
+      "features": {
+        "storageCapacity": "64gb",
+        "displaySize": "4.2inches",
+        "displayResolution": "2k",
+        "healthMonitoring": "ECG",
+        "batteryLife": "Multi-day"
+      },
+      "size": {
+        "weight": "60 grams",
+        "dimensions": "48 x 42 x 12 mm"
+      },
+      "price": "550",
+      "releaseDate": "2024-02-10",
+      "brand": "Huawei",
+      "operatingSystem": "Android",
+      "connectivity": " USB-C",
+      "powerSource": "battery-powered"
+    }
+  ]
+
+    /** Headphone Category:**/
+    [
+        {
+          "category": "Headphone",
+          "features": {
+            "headphoneType": "Over-Ear",
+            "batteryLife": "48 hours"
+          },
+          "size": {
+            "weight": "255 grams",
+            "dimensions": "180 x 170 x 80 mm"
+          },
+          "price": "300",
+          "releaseDate": "2024-04-10",
+          "brand": "Sony",
+          "connectivity": "Bluetooth",
+          "powerSource": "battery-powered"
+        },
+        {
+          "category": "Headphone",
+          "features": {
+            "headphoneType": "In-Ear",
+            "batteryLife": "24 hours"
+          },
+          "size": {
+            "weight": "16 grams",
+            "dimensions": "40 x 20 x 20 mm"
+          },
+          "price": "150",
+          "releaseDate": "2024-03-15",
+          "brand": "Bose",
+          "connectivity": " USB-C",
+          "powerSource": "battery-powered"
+        },
+        {
+          "category": "Headphone",
+          "features": {
+            "headphoneType": "Earbuds",
+            "batteryLife": "72 hours"
+          },
+          "size": {
+            "weight": "5 grams",
+            "dimensions": "30 x 20 x 10 mm"
+          },
+          "price": "250",
+          "releaseDate": "2024-02-20",
+          "brand": "Apple",
+          "connectivity": "Bluetooth",
+          "powerSource": "battery-powered"
+        }
+      ]
+
+  /** Speaker Category:**/
+  [
+    {
+      "category": "Speaker",
+      "features": {
+        "speakerType": "Portable"
+      },
+      "size": {
+        "weight": "1.5 kg",
+        "dimensions": "250 x 150 x 130 mm"
+      },
+      "price": "200",
+      "releaseDate": "2024-01-01",
+      "brand": "JBL",
+      "connectivity": "Bluetooth",
+      "powerSource": "battery-powered"
+    },
+    {
+      "category": "Speaker",
+      "features": {
+        "speakerType": "Soundbar"
+      },
+      "size": {
+        "weight": "3.2 kg",
+        "dimensions": "960 x 85 x 70 mm"
+      },
+      "price": "350",
+      "releaseDate": "2024-03-10",
+      "brand": "Sony",
+      "connectivity": " Wi-Fi",
+      "powerSource": "plug-in"
+    },
+    {
+      "category": "Speaker",
+      "features": {
+        "speakerType": "Subwoofer"
+      },
+      "size": {
+        "weight": "7.8 kg",
+        "dimensions": "400 x 400 x 400 mm"
+      },
+      "price": "500",
+      "releaseDate": "2024-02-20",
+      "brand": "Bose",
+      "connectivity": " USB-C",
+      "powerSource": "plug-in"
+    }
+  ]
+
+    /** Camera Category:**/
+    [
+        {
+          "category": "Camera",
+          "features": {
+            "cameraType": "DSLR",
+            "cameraResolution": "108mp"
+          },
+          "size": {
+            "weight": "840 grams",
+            "dimensions": "150 x 120 x 75 mm"
+          },
+          "price": "1200",
+          "releaseDate": "2024-04-15",
+          "brand": "Canon",
+          "connectivity": " Wi-Fi",
+          "powerSource": "battery-powered"
+        },
+        {
+          "category": "Camera",
+          "features": {
+            "cameraType": "Mirrorless",
+            "cameraResolution": "48mp"
+          },
+          "size": {
+            "weight": "500 grams",
+            "dimensions": "120 x 90 x 60 mm"
+          },
+          "price": "1000",
+          "releaseDate": "2024-03-20",
+          "brand": "Sony",
+          "connectivity": " USB-C",
+          "powerSource": "battery-powered"
+        },
+        {
+          "category": "Camera",
+          "features": {
+            "cameraType": "Action",
+            "cameraResolution": "16mp"
+          },
+          "size": {
+            "weight": "120 grams",
+            "dimensions": "60 x 45 x 35 mm"
+          },
+          "price": "350",
+          "releaseDate": "2024-02-25",
+          "brand": "GoPro",
+          "connectivity": "Bluetooth",
+          "powerSource": "battery-powered"
+        }
+      ]

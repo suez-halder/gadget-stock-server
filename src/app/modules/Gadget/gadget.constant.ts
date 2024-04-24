@@ -1,20 +1,25 @@
 import {
+  TBatteryLife,
   TCameraResolution,
+  TCameraType,
   TCategory,
   TConnectivity,
   TDisplayResolution,
   TDisplaySize,
   TFeatures,
+  THeadphoneType,
+  THealthMonitoring,
   TOperatingSystem,
   TPowerSource,
+  TSpeakerType,
   TStorageCapacity,
 } from './gadget.interface'
 
 export const Category: TCategory[] = [
   'Smartphone',
   'Laptop',
-  'Headphone',
   'Smartwatch',
+  'Headphone',
   'Speaker',
   'Camera',
 ]
@@ -30,12 +35,16 @@ export const CameraResolution: TCameraResolution[] = [
   '108mp',
 ]
 export const StorageCapacity: TStorageCapacity[] = [
+  '64gb',
+  '128gb',
   '256gb',
   '512gb',
   '1tb',
   '2tb',
 ]
 export const DisplaySize: TDisplaySize[] = [
+  '3.5inches',
+  '4.2inches',
   '6inches',
   '6.7inches',
   '13inches',
@@ -44,7 +53,42 @@ export const DisplaySize: TDisplaySize[] = [
 ]
 export const DisplayResolution: TDisplayResolution[] = [
   '720p',
-  '1280P',
+  '1080p',
   '2k',
   '4k',
+]
+
+export const CameraTyppe: TCameraType[] = [
+  'DSLR',
+  'Mirrorless',
+  'Compact',
+  'Action',
+]
+
+export const HeadphoneType: THeadphoneType[] = [
+  'Over-Ear',
+  'On-Ear',
+  'In-Ear',
+  'Earbuds',
+]
+
+export const SpeakerType: TSpeakerType[] = [
+  'Portable',
+  'Bookshelf',
+  'Soundbar',
+  'Subwoofer',
+]
+
+export const HealthMonitoring: THealthMonitoring[] = [
+  'Heart Rate',
+  'Blood Oxygen',
+  'ECG',
+  'Sleep Tracking',
+]
+
+export const BatteryLife: TBatteryLife[] = [
+  '24 hours',
+  '48 hours',
+  '72 hours',
+  'Multi-day',
 ]
