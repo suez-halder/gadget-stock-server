@@ -16,55 +16,65 @@ import {
 } from './gadget.constant'
 import { TFeatures, TGadget, TSize } from './gadget.interface'
 
-const featuresSchema = new Schema<TFeatures>({
-  cameraResolution: {
-    type: String,
-    enum: CameraResolution,
+const featuresSchema = new Schema<TFeatures>(
+  {
+    cameraResolution: {
+      type: String,
+      enum: CameraResolution,
+    },
+    storageCapacity: {
+      type: String,
+      enum: StorageCapacity,
+    },
+    displaySize: {
+      type: String,
+      enum: DisplaySize,
+    },
+    displayResolution: {
+      type: String,
+      enum: DisplayResolution,
+    },
+    cameraType: {
+      type: String,
+      enum: CameraType,
+    },
+    headphoneType: {
+      type: String,
+      enum: HeadphoneType,
+    },
+    speakerType: {
+      type: String,
+      enum: SpeakerType,
+    },
+    healthMonitoring: {
+      type: String,
+      enum: HealthMonitoring,
+    },
+    batteryLife: {
+      type: String,
+      enum: BatteryLife,
+    },
   },
-  storageCapacity: {
-    type: String,
-    enum: StorageCapacity,
+  {
+    _id: false,
   },
-  displaySize: {
-    type: String,
-    enum: DisplaySize,
-  },
-  displayResolution: {
-    type: String,
-    enum: DisplayResolution,
-  },
-  cameraType: {
-    type: String,
-    enum: CameraType,
-  },
-  headphoneType: {
-    type: String,
-    enum: HeadphoneType,
-  },
-  speakerType: {
-    type: String,
-    enum: SpeakerType,
-  },
-  healthMonitoring: {
-    type: String,
-    enum: HealthMonitoring,
-  },
-  batteryLife: {
-    type: String,
-    enum: BatteryLife,
-  },
-})
+)
 
-const sizeSchema = new Schema<TSize>({
-  weight: {
-    type: String,
-    required: true,
+const sizeSchema = new Schema<TSize>(
+  {
+    weight: {
+      type: String,
+      required: true,
+    },
+    dimensions: {
+      type: String,
+      required: true,
+    },
   },
-  dimensions: {
-    type: String,
-    required: true,
+  {
+    _id: false,
   },
-})
+)
 
 const gadgetSchema = new Schema<TGadget>(
   {
