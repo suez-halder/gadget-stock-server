@@ -48,9 +48,9 @@ const getAllGadgetsFromDB = async (user: TAuthUser) => {
       user: {
         _id: userData.id,
       },
-    })
+    }).populate('user')
   } else {
-    result = await Gadget.find()
+    result = await Gadget.find().populate('user')
   }
 
   return result
@@ -70,6 +70,10 @@ const getSingleGadgetFromDB = async (id: string, user: TAuthUser) => {
     )
   }
 
+  if (isGadgetExists.isDeleted === true) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'This Gadget has been deleted!')
+  }
+
   const userData = await User.findOne({
     email: user.email,
   })
@@ -85,7 +89,7 @@ const getSingleGadgetFromDB = async (id: string, user: TAuthUser) => {
         _id: userData.id,
       },
       _id: id,
-    })
+    }).populate('user')
     if (!result) {
       throw new ApiError(
         httpStatus.UNAUTHORIZED,
@@ -93,7 +97,7 @@ const getSingleGadgetFromDB = async (id: string, user: TAuthUser) => {
       )
     }
   } else {
-    result = await Gadget.findById(id)
+    result = await Gadget.findById(id).populate('user')
   }
 
   return result
@@ -125,9 +129,24 @@ const updateGadgetIntoDB = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
 
-  let result
+  const { isDeleted, features, size, ...remainingGadgetData } = payload
 
-  //TODO: update for objects
+  if (isDeleted !== undefined) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Modifying the deletion status is not allowed through this route.',
+    )
+  }
+
+  let modifiedData: Record<string, unknown> = { ...remainingGadgetData }
+
+  if (features && Object.keys(features).length) {
+    for (const [key, value] of Object.entries(features)) {
+      modifiedData[`features.${key}`] = value
+    }
+  }
+
+  let result
 
   if (userData.role === USER_ROLE.USER) {
     result = await Gadget.findOneAndUpdate(
@@ -137,7 +156,11 @@ const updateGadgetIntoDB = async (
         },
         _id: id,
       },
-      payload,
+      modifiedData,
+      {
+        runValidators: true,
+        new: true,
+      },
     )
     if (!result) {
       throw new ApiError(
@@ -146,7 +169,10 @@ const updateGadgetIntoDB = async (
       )
     }
   } else {
-    result = await Gadget.findByIdAndUpdate(id, payload)
+    result = await Gadget.findByIdAndUpdate(id, modifiedData, {
+      runValidators: true,
+      new: true,
+    })
   }
 
   return result
