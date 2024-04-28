@@ -65,15 +65,28 @@ const getAllGadgetsFromDB = async (
   })
 
   // exclude fields
-  const excludeFields = ['searchTerm']
+  const excludeFields = ['searchTerm', 'sort', 'limit']
   excludeFields.forEach((ele) => delete queryObj[ele])
 
-  console.log('base query: ', query)
-  console.log('query object: ', queryObj)
+  console.log({ query }, { queryObj })
 
-  const result = await searchQuery.find(queryObj).populate('user')
+  const filterQuery = searchQuery.find(queryObj).populate('user')
 
-  return result
+  let sort = '-createdAt'
+  if (query?.sort) {
+    sort = query.sort as string
+  }
+
+  const sortQuery = filterQuery.sort(sort).populate('user')
+
+  let limit = 5
+  if (query?.limit) {
+    limit = query.limit as number
+  }
+
+  const limitQuery = await sortQuery.limit(limit).populate('user')
+
+  return limitQuery
 }
 
 // -------------------
