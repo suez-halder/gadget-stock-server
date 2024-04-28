@@ -97,3 +97,25 @@ export const BatteryLife: TBatteryLife[] = [
   '72 hours',
   'Multi-day',
 ]
+
+export const gadgetSearchableFields = [
+  'user.name',
+  'user.email',
+  'price',
+  'brand',
+  'category',
+  'operatingSystem',
+  'connectivity',
+  'powerSource',
+  'features.storageCapacity',
+  'features.cameraResolution',
+  'features.displaySize',
+  'features.displayResolution',
+  'features.cameraType',
+  'features.headphoneType',
+  'features.speakerType',
+  'features.healthMonitoring',
+  'features.batteryLife',
+  'size.weight',
+  'size.dimensions',
+]

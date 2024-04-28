@@ -4,6 +4,7 @@ import ApiError from '../../errors/ApiError'
 import { TAuthUser } from '../../interfaces/common/user'
 import { USER_ROLE } from '../User/user.constant'
 import { User } from '../User/user.model'
+import { gadgetSearchableFields } from './gadget.constant'
 
 // -----------------
 // ! Create Gadget
@@ -31,7 +32,12 @@ const createGadgetIntoDB = async (payload: TGadget, user: TAuthUser) => {
 // ! Get All Gadgets
 // -----------------
 
-const getAllGadgetsFromDB = async (user: TAuthUser) => {
+const getAllGadgetsFromDB = async (
+  user: TAuthUser,
+  query: Record<string, unknown>,
+) => {
+  console.log(query)
+
   const userData = await User.findOne({
     email: user.email,
   })
@@ -42,15 +48,30 @@ const getAllGadgetsFromDB = async (user: TAuthUser) => {
   let result
 
   //TODO: filtering
+  // {user.email : {$regex: query.searchTerm, $options: 'i'}}
+  // {price : {$regex: query.searchTerm, $options: 'i'}}
+  // {brand : {$regex: query.searchTerm, $options: 'i'}}
+
+  let searchTerm = ''
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm
+  }
 
   if (userData.role === USER_ROLE.USER) {
     result = await Gadget.find({
       user: {
         _id: userData.id,
       },
+      $or: gadgetSearchableFields.map((field) => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
     }).populate('user')
   } else {
-    result = await Gadget.find().populate('user')
+    result = await Gadget.find({
+      $or: gadgetSearchableFields.map((field) => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
+    }).populate('user')
   }
 
   return result

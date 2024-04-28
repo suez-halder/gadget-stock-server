@@ -17,7 +17,8 @@ const createGadgetIntoDB = catchAsync(async (req, res) => {
 })
 const getAllGadgetsFromDB = catchAsync(async (req, res) => {
   const user = req.user as TAuthUser
-  const result = await GadgetServices.getAllGadgetsFromDB(user)
+  const query = req.query
+  const result = await GadgetServices.getAllGadgetsFromDB(user, query)
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
