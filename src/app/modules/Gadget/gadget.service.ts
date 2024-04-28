@@ -1,5 +1,6 @@
 import httpStatus from 'http-status'
 import { v4 as uuidv4 } from 'uuid'
+import QueryBuilder from '../../builder/QueryBuilder'
 import ApiError from '../../errors/ApiError'
 import { TAuthUser } from '../../interfaces/common/user'
 import { USER_ROLE } from '../User/user.constant'
@@ -36,8 +37,6 @@ const getAllGadgetsFromDB = async (
   user: TAuthUser,
   query: Record<string, unknown>,
 ) => {
-  const queryObj = { ...query } // copy
-
   // check 1: if user exists
   const userData = await User.findOne({
     email: user.email,
@@ -46,67 +45,27 @@ const getAllGadgetsFromDB = async (
   if (!userData) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
-  //? searching/filtering/pagination
 
-  // {user.email : {$regex: query.searchTerm, $options: 'i'}}
-  // {price : {$regex: query.searchTerm, $options: 'i'}}
-  // {brand : {$regex: query.searchTerm, $options: 'i'}}
-
-  let searchTerm = ''
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string
+  let baseQuery = Gadget.find()
+  if (userData.role === USER_ROLE.USER) {
+    baseQuery = baseQuery.find({ user: { _id: userData.id } })
   }
 
-  const searchQuery = Gadget.find({
-    ...(userData.role === USER_ROLE.USER ? { user: { _id: userData.id } } : {}),
-    $or: gadgetSearchableFields.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  }).populate('user')
+  // searching/filtering/pagination
+  const gadgetQUery = new QueryBuilder(baseQuery.populate('user'), query)
+    .search(gadgetSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
 
-  // exclude fields
-  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
-  excludeFields.forEach((ele) => delete queryObj[ele])
+  const result = await gadgetQUery.modelQuery
+  const meta = await gadgetQUery.countTotal()
 
-  console.log({ query }, { queryObj })
-
-  const filterQuery = searchQuery.find(queryObj)
-
-  let sort = '-createdAt'
-  if (query?.sort) {
-    sort = query.sort as string
+  return {
+    meta,
+    result,
   }
-
-  const sortQuery = filterQuery.sort(sort)
-
-  let page = 1
-  let limit = 10
-  let skip = 0
-
-  if (query?.limit) {
-    limit = Number(query.limit)
-  }
-
-  if (query?.page) {
-    page = Number(query.page)
-    skip = (page - 1) * limit
-  }
-
-  const paginateQuery = sortQuery.skip(skip)
-
-  const limitQuery = paginateQuery.limit(limit)
-
-  // field limiting
-  let fields = '-__v'
-
-  if (query?.fields) {
-    fields = (query.fields as string).split(',').join(' ')
-    console.log({ fields })
-  }
-
-  const fieldQuery = await limitQuery.select(fields)
-
-  return fieldQuery
 }
 
 // -------------------

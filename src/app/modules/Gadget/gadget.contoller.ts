@@ -24,7 +24,8 @@ const getAllGadgetsFromDB = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: `All gadgets fetched successfully!`,
-    data: result,
+    meta: result.meta,
+    data: result.result,
   })
 })
 const getSingleGadgetFromDB = catchAsync(async (req, res) => {
