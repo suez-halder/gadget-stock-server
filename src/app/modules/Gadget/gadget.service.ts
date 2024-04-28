@@ -36,8 +36,9 @@ const getAllGadgetsFromDB = async (
   user: TAuthUser,
   query: Record<string, unknown>,
 ) => {
-  console.log(query)
+  const queryObj = { ...query } // copy
 
+  // check 1: if user exists
   const userData = await User.findOne({
     email: user.email,
   })
@@ -45,34 +46,32 @@ const getAllGadgetsFromDB = async (
   if (!userData) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
-  let result
+  //? searching/filtering/pagination
 
-  //TODO: filtering
   // {user.email : {$regex: query.searchTerm, $options: 'i'}}
   // {price : {$regex: query.searchTerm, $options: 'i'}}
   // {brand : {$regex: query.searchTerm, $options: 'i'}}
 
   let searchTerm = ''
   if (query?.searchTerm) {
-    searchTerm = query?.searchTerm
+    searchTerm = query?.searchTerm as string
   }
 
-  if (userData.role === USER_ROLE.USER) {
-    result = await Gadget.find({
-      user: {
-        _id: userData.id,
-      },
-      $or: gadgetSearchableFields.map((field) => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    }).populate('user')
-  } else {
-    result = await Gadget.find({
-      $or: gadgetSearchableFields.map((field) => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    }).populate('user')
-  }
+  const searchQuery = Gadget.find({
+    ...(userData.role === USER_ROLE.USER ? { user: { _id: userData.id } } : {}),
+    $or: gadgetSearchableFields.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  })
+
+  // exclude fields
+  const excludeFields = ['searchTerm']
+  excludeFields.forEach((ele) => delete queryObj[ele])
+
+  console.log('base query: ', query)
+  console.log('query object: ', queryObj)
+
+  const result = await searchQuery.find(queryObj).populate('user')
 
   return result
 }
@@ -102,23 +101,16 @@ const getSingleGadgetFromDB = async (id: string, user: TAuthUser) => {
   if (!userData) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
-  let result
 
-  if (userData.role === USER_ROLE.USER) {
-    result = await Gadget.findOne({
-      user: {
-        _id: userData.id,
-      },
-      _id: id,
-    }).populate('user')
-    if (!result) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        'You are not authorized to view this gadget',
-      )
-    }
-  } else {
-    result = await Gadget.findById(id).populate('user')
+  const result = await (userData.role === USER_ROLE.USER
+    ? Gadget.findOne({ user: { _id: userData.id }, _id: id }).populate('user')
+    : Gadget.findById(id).populate('user'))
+
+  if (!result && userData.role === USER_ROLE.USER) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'You are not authorized to view this gadget',
+    )
   }
 
   return result
@@ -167,33 +159,22 @@ const updateGadgetIntoDB = async (
     }
   }
 
-  let result
-
-  if (userData.role === USER_ROLE.USER) {
-    result = await Gadget.findOneAndUpdate(
-      {
-        user: {
-          _id: userData.id,
-        },
-        _id: id,
-      },
-      modifiedData,
-      {
+  const result = await (userData.role === USER_ROLE.USER
+    ? Gadget.findOneAndUpdate(
+        { user: { _id: userData.id }, _id: id },
+        modifiedData,
+        { runValidators: true, new: true },
+      )
+    : Gadget.findByIdAndUpdate(id, modifiedData, {
         runValidators: true,
         new: true,
-      },
+      }))
+
+  if (!result && userData.role === USER_ROLE.USER) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'You are not authorized to update this gadget',
     )
-    if (!result) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        'You are not authorized to update this gadget',
-      )
-    }
-  } else {
-    result = await Gadget.findByIdAndUpdate(id, modifiedData, {
-      runValidators: true,
-      new: true,
-    })
   }
 
   return result
@@ -225,30 +206,18 @@ const softDeleteGadgetFromDB = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
 
-  let result
-
-  if (userData.role === USER_ROLE.USER) {
-    result = await Gadget.findOneAndUpdate(
-      {
-        user: {
-          _id: userData.id,
-        },
-        _id: id,
-      },
-      {
-        isDeleted: payload.isDeleted,
-      },
-    )
-    if (!result) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        'You are not authorized to delete this gadget',
+  const result = await (userData.role === USER_ROLE.USER
+    ? Gadget.findOneAndUpdate(
+        { user: { _id: userData.id }, _id: id },
+        { isDeleted: payload.isDeleted },
       )
-    }
-  } else {
-    result = await Gadget.findByIdAndUpdate(id, {
-      isDeleted: payload.isDeleted,
-    })
+    : Gadget.findByIdAndUpdate(id, { isDeleted: payload.isDeleted }))
+
+  if (!result && userData.role === USER_ROLE.USER) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'You are not authorized to delete this gadget',
+    )
   }
 
   return result
@@ -277,23 +246,15 @@ const deleteGadgetFromDB = async (id: string, user: TAuthUser) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found!')
   }
 
-  let result
+  const result = await (userData.role === USER_ROLE.USER
+    ? Gadget.findOneAndDelete({ user: { _id: userData.id }, _id: id })
+    : Gadget.findByIdAndDelete(id))
 
-  if (userData.role === USER_ROLE.USER) {
-    result = await Gadget.findOneAndDelete({
-      user: {
-        _id: userData.id,
-      },
-      _id: id,
-    })
-    if (!result) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        'You are not authorized to delete this gadget from DB',
-      )
-    }
-  } else {
-    result = await Gadget.findByIdAndDelete(id)
+  if (!result && userData.role === USER_ROLE.USER) {
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'You are not authorized to delete this gadget from DB',
+    )
   }
 
   return result
